@@ -1,5 +1,5 @@
 
-local library = loadstring(game:HttpGet("https://github.com/waxxan2/Pulse-/raw/refs/heads/main/Gui.lua.txt"))()
+local library = loadstring(game:HttpGet("https://github.com/waxxan2/Pulse/raw/refs/heads/main/SynioxGui%20(3).txt"))()
 _G.library = library 
 
 local player = game.Players.LocalPlayer
