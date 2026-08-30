@@ -1,3 +1,4 @@
+
 local library = loadstring(game:HttpGet("https://github.com/waxxan2/Pulse-/raw/refs/heads/main/Gui.lua.txt"))()
 _G.library = library 
 
@@ -11,22 +12,23 @@ local repsPerTick = 1
 
 local window = library:AddWindow("Pulse Hub Public | Muscle Legends || HI - ".. displayName, {
     title_bar = {
-        Color3.fromRGB(180, 0, 255),
-        Color3.fromRGB(60, 0, 100),
-        Color3.fromRGB(0, 0, 0)
+        Color3.fromRGB(200, 0, 0),     -- Canlı Kırmızı
+        Color3.fromRGB(100, 0, 0),     -- Koyu Kırmızı
+        Color3.fromRGB(0, 0, 0)        -- Siyah
     }, 
     title_bar_transparency = 0.1, 
     background = {
-        Color3.fromRGB(10, 5, 15),
-        Color3.fromRGB(15, 10, 25),
-        Color3.fromRGB(0, 0, 0)
+        Color3.fromRGB(20, 0, 0),      -- Çok Koyu Kırmızı Arkaplan
+        Color3.fromRGB(40, 0, 0),      -- Biraz daha açık Koyu Kırmızı
+        Color3.fromRGB(0, 0, 0)        -- Siyah
     }, 
     background_transparency = 0.1, 
-    main_color = Color3.fromRGB(104, 34, 139),
+    main_color = Color3.fromRGB(180, 0, 0), -- Ana Vurgu Rengi (Kırmızı)
     min_size = Vector2.new(430, 290), 
     can_resize = true 
 })
 _G.window = window
+
 
 local AutoFarm = window:AddTab("Farm")
 
