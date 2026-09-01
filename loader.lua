@@ -48,3 +48,4 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
         end
     end)
 end)
+local AutoFarm = window:AddTab("Rock")
