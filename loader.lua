@@ -10,7 +10,7 @@ _G.displayName = displayName
 
 local repsPerTick = 1 
 
-local window = library:AddWindow("Pulse Hub Public | Muscle Legends || HI - ".. displayName, {
+local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - ".. displayName, {
     title_bar = {
         Color3.fromRGB(200, 0, 0),     -- Canlı Kırmızı
         Color3.fromRGB(100, 0, 0),     -- Koyu Kırmızı
