@@ -44,8 +44,7 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
                     event:FireServer("rep")
                 end
             end
-            task.wait(0.01)
+            task.wait(0.1)
         end
     end)
 end)
-local AutoFarm = window:AddTab("Rock")
