@@ -93,3 +93,30 @@ task.spawn(function()
         end
     end
 end)
+_G.repToggle = false
+
+AutoFarm:AddSwitch(" handstans ", function(state)
+    _G.repToggle = state
+end)
+
+task.spawn(function()
+    local player = game:GetService("Players").LocalPlayer
+    local muscleEvent = player:WaitForChild("muscleEvent")
+
+    while task.wait(0.1) do
+        if _G.repToggle then
+            local character = player.Character
+            if character then
+                local handstans = player.Backpack:FindFirstChild("Handstans") or character:FindFirstChild("Handstans")
+                
+                if weight then
+                    if handstans.Parent ~= character then
+                        handstans.Parent = character
+                    end
+                    
+                    muscleEvent:FireServer("rep")
+                end
+            end
+        end
+    end
+end)
