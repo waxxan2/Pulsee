@@ -48,3 +48,49 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
         end
     end)
 end)
+-- Oyuncu ve servisleri tanımla
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local vim = game:GetService("VirtualInputManager")
+
+-- Otomatik Weight Kuşanma ve Rep Fonksiyonu
+local function autoMuscle()
+    -- Sürekli çalışması için döngü
+    while task.wait(0.1) do
+        pcall(function()
+            -- 1. En iyi ağırlığı bul ve kuşan
+            local backpack = player:FindFirstChild("Backpack")
+            local char = player.Character
+            
+            if backpack and char then
+                -- Önce elinde ağırlık var mı bak, yoksa en iyisini bul
+                local currentWeight = char:FindFirstChildOfClass("Tool")
+                if not currentWeight or not currentWeight.Name:lower():find("weight") then
+                    -- En yüksek değere sahip ağırlığı çanta veya envanterde ara
+                    local bestWeight = nil
+                    
+                    for _, item in ipairs(backpack:GetChildren()) do
+                        if item:IsA("Tool") and item.Name:lower():find("weight") then
+                            bestWeight = item
+                            break -- En basit mantıkla ilk bulduğu veya envanterdeki ağırlığı alır
+                        end
+                    end
+                    
+                    if bestWeight then
+                        char.Humanoid:EquipTool(bestWeight)
+                    end
+                end
+            end
+            
+            -- 2. Otomatik Rep Kaldırma (Tıklama simülasyonu)
+            -- Oyuncunun gücüne/rep değerine göre otomatik tetiklenir
+            vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+            task.wait(0.01)
+            vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+        end)
+    end
+end
+
+-- Scripti başlat
+task.spawn(autoMuscle)
+print("Muscles Legends Auto-Weight & Lift aktif!")
