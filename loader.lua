@@ -1,4 +1,3 @@
-
 local library = loadstring(game:HttpGet("https://github.com/waxxan2/Pulse/raw/refs/heads/main/SynioxGui%20(3).txt"))()
 _G.library = library 
 
@@ -12,67 +11,55 @@ local repsPerTick = 1
 
 local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - ".. displayName, {
     title_bar = {
-    Color3.fromRGB(0, 150, 255),
-    Color3.fromRGB(0, 100, 200),
-    Color3.fromRGB(0, 20, 50)
-},
-title_bar_transparency = 0.1,
-background = {
-    Color3.fromRGB(10, 25, 40),
-    Color3.fromRGB(20, 45, 70),
-    Color3.fromRGB(0, 5, 15)
-},
-background_transparency = 0.1,
-main_color = Color3.fromRGB(50, 180, 255),
-min_size = Vector2.new(430, 290),
-can_resize = true
-})
-
-    can_resize = true 
+        Color3.fromRGB(0, 150, 255),
+        Color3.fromRGB(0, 100, 200),
+        Color3.fromRGB(0, 20, 50)
+    },
+    title_bar_transparency = 0.1,
+    background = {
+        Color3.fromRGB(10, 25, 40),
+        Color3.fromRGB(20, 45, 70),
+        Color3.fromRGB(0, 5, 15)
+    },
+    background_transparency = 0.1,
+    main_color = Color3.fromRGB(50, 180, 255),
+    min_size = Vector2.new(430, 290),
+    can_resize = true
 })
 _G.window = window
 
-
 local AutoFarm = window:AddTab("Farm")
 
-_G.repToggle = false
-AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
-    _G.repToggle = state
-    task.spawn(function()
-        while _G.repToggle do
-            local event = game:GetService("Players").LocalPlayer:FindFirstChild("muscleEvent")
-            if event then
-                for i = 1, repsPerTick do
-                    if not _G.repToggle then break end
-                    event:FireServer("rep")
-                end
-            end
+_G.autoFarmToggle = false
+_G.weightToggle = false
 
-           task.wait(0.1)
-        end
-    end)
+AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
+    _G.autoFarmToggle = state
 end)
-_G.repToggle = false
 
 AutoFarm:AddSwitch(" weight ", function(state)
-    _G.repToggle = state
+    _G.weightToggle = state
 end)
 
 task.spawn(function()
-    local player = game:GetService("Players").LocalPlayer
     local muscleEvent = player:WaitForChild("muscleEvent")
 
     while task.wait(0.1) do
-        if _G.repToggle then
+        if _G.autoFarmToggle then
+            for i = 1, repsPerTick do
+                if not _G.autoFarmToggle then break end
+                muscleEvent:FireServer("rep")
+            end
+        end
+
+        if _G.weightToggle then
             local character = player.Character
             if character then
                 local weight = player.Backpack:FindFirstChild("Weight") or character:FindFirstChild("Weight")
-                
                 if weight then
                     if weight.Parent ~= character then
                         weight.Parent = character
                     end
-                    
                     muscleEvent:FireServer("rep")
                 end
             end
