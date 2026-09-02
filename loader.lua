@@ -109,7 +109,7 @@ task.spawn(function()
             if character then
                 local handstans = player.Backpack:FindFirstChild("Handstans") or character:FindFirstChild("Handstans")
                 
-                if weight then
+                if handstans then
                     if handstans.Parent ~= character then
                         handstans.Parent = character
                     end
