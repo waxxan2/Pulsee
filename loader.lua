@@ -49,3 +49,30 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
         end
     end)
 end)
+_G.repToggle = false
+
+AutoFarm:AddSwitch(" weight ", function(state)
+    _G.repToggle = state
+end)
+
+task.spawn(function()
+    local player = game:GetService("Players").LocalPlayer
+    local muscleEvent = player:WaitForChild("muscleEvent")
+
+    while task.wait(0.1) do
+        if _G.repToggle then
+            local character = player.Character
+            if character then
+                local weight = player.Backpack:FindFirstChild("Weight") or character:FindFirstChild("Weight")
+                
+                if weight then
+                    if weight.Parent ~= character then
+                        weight.Parent = character
+                    end
+                    
+                    muscleEvent:FireServer("rep")
+                end
+            end
+        end
+    end
+end)
