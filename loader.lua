@@ -62,18 +62,21 @@ task.spawn(function()
             local character = player.Character or player.CharacterAdded:Wait()
             local backpack = player:FindFirstChildOfClass("Backpack")
             
-            -- Backpack'te veya karakterin üzerindeyse dambılı (weight) bul ve eline al
+            
             local weight = character:FindFirstChild("weight") or (backpack and backpack:FindFirstChild("weight"))
             
-            if weight and weight.Parent == backpack then
-                weight.Parent = character
-            end
-            
-            -- Elindeyse otomatik ağırlık kaldırma fonksiyonunu/aktivasyonunu tetikle
-            if weight and weight.Parent == character then
-                weight:Activate()
+            if weight then
+                
+                if weight.Parent == backpack then
+                    weight.Parent = character
+                end
+                
+             
+                if weight.Parent == character then
+                    weight:Activate()
+                end
             end
         end
-        task.wait(0.01)
+        task.wait(0.1)
     end
 end)
