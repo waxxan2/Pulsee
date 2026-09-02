@@ -48,3 +48,19 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
         end
     end)
 end)
+_G.repToggle = false
+AutoFarm:AddSwitch("💪 weight (equip)"; function(state)
+        _G.repToggle = state
+        task.spawn(function()
+                while _G.repToggle do
+                    local event = game:GetService("players").LocalPlayer:FindFirstChild("muscleEvent")
+                    if event then
+                        for i = 1, repsPerTick do
+                            if not _G.repToggle then break end
+                            event:FireServer("rep")
+                        end
+                    end
+                    task.wait(0.1)
+                end
+            end)
+    end)
