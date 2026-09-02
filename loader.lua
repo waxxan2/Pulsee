@@ -48,7 +48,7 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
         end
     end)
 end)
-_G.repToggle = false
+_G.repToggle = true
 AutoFarm:AddSwitch("💪 weight (equip)"; function(state)
         _G.repToggle = state
         task.spawn(function()
@@ -63,4 +63,4 @@ AutoFarm:AddSwitch("💪 weight (equip)"; function(state)
                     task.wait(0.1)
                 end
             end)
-    end)
+    end
