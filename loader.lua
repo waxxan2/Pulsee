@@ -55,7 +55,7 @@ task.spawn(function()
         if _G.weightToggle then
             local character = player.Character
             if character then
-                local weight = player.Backpack:FindFirstChild("Pushups") or character:FindFirstChild("Pushups")
+                local weight = player.Backpack:FindFirstChild("Pushups") or character:FindFirstChild("Weight")
                 if weight then
                     if weight.Parent ~= character then
                         weight.Parent = character
