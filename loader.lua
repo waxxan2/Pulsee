@@ -1,15 +1,15 @@
 local library = loadstring(game:HttpGet("https://github.com/waxxan2/Pulse/raw/refs/heads/main/SynioxGui%20(3).txt"))()
-_G.library = library 
+_G.library = library
 
 local player = game.Players.LocalPlayer
-_G.player = player 
+_G.player = player
 
 local displayName = player.DisplayName
-_G.displayName = displayName 
+_G.displayName = displayName
 
-local repsPerTick = 1 
+local repsPerTick = 1
 
-local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - ".. displayName, {
+local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - " .. displayName, {
     title_bar = {
         Color3.fromRGB(200, 0, 0),
         Color3.fromRGB(100, 0, 0),
@@ -26,97 +26,88 @@ local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - "
     min_size = Vector2.new(430, 290),
     can_resize = true
 })
+
 _G.window = window
 
 local AutoFarm = window:AddTab("Farm")
 
 _G.autoFarmToggle = false
 _G.weightToggle = false
+_G.pushupsToggle = false
+_G.handstandsToggle = false
 
 AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
     _G.autoFarmToggle = state
 end)
 
-AutoFarm:AddSwitch(" weight ", function(state)
+AutoFarm:AddSwitch("Weight", function(state)
     _G.weightToggle = state
+end)
+
+AutoFarm:AddSwitch("Pushups", function(state)
+    _G.pushupsToggle = state
+end)
+
+AutoFarm:AddSwitch("Handstands", function(state)
+    _G.handstandsToggle = state
 end)
 
 task.spawn(function()
     local muscleEvent = player:WaitForChild("muscleEvent")
 
     while task.wait(0.1) do
+        local character = player.Character
+
+        if not character then
+            continue
+        end
+
         if _G.autoFarmToggle then
             for i = 1, repsPerTick do
-                if not _G.autoFarmToggle then break end
+                if not _G.autoFarmToggle then
+                    break
+                end
+
                 muscleEvent:FireServer("rep")
             end
         end
 
         if _G.weightToggle then
-            local character = player.Character
-            if character then
-                local weight = player.Backpack:FindFirstChild("Weight") or character:FindFirstChild("Weight")
-                if weight then
-                    if weight.Parent ~= character then
-                        weight.Parent = character
-                    end
-                    muscleEvent:FireServer("rep")
+            local weight = character:FindFirstChild("Weight")
+                or player.Backpack:FindFirstChild("Weight")
+
+            if weight then
+                if weight.Parent ~= character then
+                    weight.Parent = character
                 end
+
+                muscleEvent:FireServer("rep")
             end
         end
-    end
-end)
-_G.repToggle = false
 
-AutoFarm:AddSwitch(" pushups ", function(state)
-    _G.repToggle = state
-end)
+        if _G.pushupsToggle then
+            local pushups = character:FindFirstChild("Pushups")
+                or player.Backpack:FindFirstChild("Pushups")
 
-task.spawn(function()
-    local player = game:GetService("Players").LocalPlayer
-    local muscleEvent = player:WaitForChild("muscleEvent")
-
-    while task.wait(0.1) do
-        if _G.repToggle then
-            local character = player.Character
-            if character then
-                local pushups = player.Backpack:FindFirstChild("Pushups") or character:FindFirstChild("Pushups")
-                
-                if pushups then
-                    if pushups.Parent ~= character then
-                        pushups.Parent = character
-                    end
-                    
-                    muscleEvent:FireServer("rep")
+            if pushups then
+                if pushups.Parent ~= character then
+                    pushups.Parent = character
                 end
+
+                muscleEvent:FireServer("rep")
             end
         end
-    end
-end)
 
-_G.repToggle = false
+        if _G.handstandsToggle then
+            local handstands = character:FindFirstChild("Handstands")
+                or player.Backpack:FindFirstChild("Handstands")
 
-AutoFarm:AddSwitch(" handstands ", function(state)
-    _G.repToggle = state
-end)
-
-task.spawn(function()
-    local player = game:GetService("Players").LocalPlayer
-    local muscleEvent = player:WaitForChild("muscleEvent")
-
-    while task.wait(0.1) do
-        if _G.repToggle then
-            local character = player.Character
-            if character then
-                local handstands = player.Backpack:FindFirstChild("Handstands") or character:FindFirstChild("Handstands")
-                
-                if handstands then
-                    if handstands.Parent ~= character then
-                        handstands.Parent = character
-                    end
-                    
-                    muscleEvent:FireServer("rep")
+            if handstands then
+                if handstands.Parent ~= character then
+                    handstands.Parent = character
                 end
+
+                muscleEvent:FireServer("rep")
             end
         end
     end
