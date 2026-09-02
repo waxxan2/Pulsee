@@ -49,34 +49,3 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
         end
     end)
 end)
-_G.repToggle = false
-
-AutoFarm:AddSwitch(" weight ", function(state)
-    _G.repToggle = state
-end)
-
-task.spawn(function()
-    while true do
-        if _G.repToggle then
-            local player = game.Players.LocalPlayer
-            local character = player.Character or player.CharacterAdded:Wait()
-            local backpack = player:FindFirstChildOfClass("Backpack")
-            
-            
-            local weight = character:FindFirstChild("weight") or (backpack and backpack:FindFirstChild("weight"))
-            
-            if weight then
-                
-                if weight.Parent == backpack then
-                    weight.Parent = character
-                end
-                
-             
-                if weight.Parent == character then
-                    weight:Activate()
-                end
-            end
-        end
-        task.wait(0.1)
-    end
-end)
