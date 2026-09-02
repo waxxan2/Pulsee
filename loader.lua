@@ -95,7 +95,7 @@ task.spawn(function()
 end)
 _G.repToggle = false
 
-AutoFarm:AddSwitch(" handstans ", function(state)
+AutoFarm:AddSwitch(" handstands ", function(state)
     _G.repToggle = state
 end)
 
@@ -107,11 +107,11 @@ task.spawn(function()
         if _G.repToggle then
             local character = player.Character
             if character then
-                local handstans = player.Backpack:FindFirstChild("Handstans") or character:FindFirstChild("Handstans")
+                local handstands = player.Backpack:FindFirstChild("Handstands") or character:FindFirstChild("Handstands")
                 
-                if handstans then
-                    if handstans.Parent ~= character then
-                        handstans.Parent = character
+                if handstands then
+                    if handstands.Parent ~= character then
+                        handstands.Parent = character
                     end
                     
                     muscleEvent:FireServer("rep")
