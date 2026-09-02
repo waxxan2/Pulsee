@@ -17,7 +17,7 @@ local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - "
     },
     title_bar_transparency = 0.1,
     background = {
-        Color3.fromRGB(20,0, 0),
+        Color3.fromRGB(20, 0, 0),
         Color3.fromRGB(40, 0, 0),
         Color3.fromRGB(0, 0, 0)
     },
@@ -49,3 +49,20 @@ task.spawn(function()
             for i = 1, repsPerTick do
                 if not _G.autoFarmToggle then break end
                 muscleEvent:FireServer("rep")
+            end
+        end
+
+        if _G.weightToggle then
+            local character = player.Character
+            if character then
+                local weight = player.Backpack:FindFirstChild("Weight") or character:FindFirstChild("Weight")
+                if weight then
+                    if weight.Parent ~= character then
+                        weight.Parent = character
+                    end
+                    muscleEvent:FireServer("rep")
+                end
+            end
+        end
+    end
+end)
