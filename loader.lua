@@ -112,3 +112,30 @@ task.spawn(function()
         end
     end
 end)
+_G.repToggle = false
+
+AutoFarm:AddSwitch(" situps ", function(state)
+    _G.repToggle = state
+end)
+
+task.spawn(function()
+    local player = game:GetService("Players").LocalPlayer
+    local muscleEvent = player:WaitForChild("muscleEvent")
+
+    while task.wait(0.1) do
+        if _G.repToggle then
+            local character = player.Character
+            if character then
+                local situps = player.Backpack:FindFirstChild("Situps") or character:FindFirstChild("Situps")
+                
+                if situps then
+                    if situps.Parent ~= character then
+                        situps.Parent = character
+                    end
+                    
+                    muscleEvent:FireServer("rep")
+                end
+            end
+        end
+    end
+end)
