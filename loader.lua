@@ -1132,10 +1132,10 @@ local showKillsButton = Killer:AddButton("Kill Counter UI", function()
 			killsGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
 			local killsFrame = Instance.new("Frame")
-			killsFrame.Size = UDim2.new(0, 180, 0, 55)
-			killsFrame.Position = UDim2.new(0.5, -90, 0, 60)
-			killsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 139)
-			killsFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			killsFrame.Size = UDim2.new(200, 0, 0, 0)
+			killsFrame.Position = UDim2.new(100, 0, 0, 0)
+			killsFrame.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+			killsFrame.BorderColor3 = Color3.fromRGB(40, 0, 0)
 			killsFrame.Active = true
 			killsFrame.Draggable = true
 			killsFrame.Parent = killsGui
