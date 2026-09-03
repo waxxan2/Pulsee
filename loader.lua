@@ -443,6 +443,9 @@ local ancientIndustrialRockSwitch = farmTab:AddSwitch("⚙️ Industrial Jungle 
         end)
     end
 end)
+
+local AutoFarm = window:AddTab("Rebirth")
+
 FastRebirthFolder:AddSwitch("Fast Rebirth", onFastRebirth);
 local RebirthsWithoutPacksFolder = FarmTab:AddFolder("Rebiths Without Packs");
 local targetRebirthValue = 0;
