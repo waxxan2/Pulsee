@@ -443,7 +443,6 @@ local ancientIndustrialRockSwitch = farmTab:AddSwitch("⚙️ Industrial Jungle 
         end)
     end
 end)
-
 task.spawn(function()
     while true do
         task.wait();
