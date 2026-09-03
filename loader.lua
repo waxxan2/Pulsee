@@ -163,47 +163,6 @@ AutoFarm:AddSwitch("👊 Auto Punch", function(state)
     end
 end)
 
-Tabs.Main:AddSection("Auto Jungle")
-
-local jungleBenchToggle = Tabs.Main:CreateToggle("JungleBench", {Title = "Auto Jungle Bench", Default = false})
-jungleBenchToggle:OnChanged(function(State)
-    if State then
-        task.spawn(function()
-            while jungleBenchToggle.Value do
-                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-8629.88086, 64.8842468, 1855.03467))
-                game:GetService("ReplicatedStorage").rEvents.machineInteractRemote:InvokeServer("useMachine", workspace.machinesFolder["Jungle Bench"].interactSeat)
-                task.wait(0.1)
-            end
-        end)
-    end
-end)
-
-local jungleBarToggle = Tabs.Main:CreateToggle("JungleBar", {Title = "Auto Jungle Bar Lift", Default = false})
-jungleBarToggle:OnChanged(function(State)
-    if State then
-        task.spawn(function()
-            while jungleBarToggle.Value do
-                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-8678.05566, 14.5030098, 2089.25977))
-                game:GetService("ReplicatedStorage").rEvents.machineInteractRemote:InvokeServer("useMachine", workspace.machinesFolder["Jungle Bar Lift"].interactSeat)
-                task.wait(0.1)
-            end
-        end)
-    end
-end)
-
-local jungleSquatToggle = Tabs.Main:CreateToggle("JungleSquat", {Title = "Auto Jungle Squat", Default = false})
-jungleSquatToggle:OnChanged(function(State)
-    if State then
-        task.spawn(function()
-            while jungleSquatToggle.Value do
-                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-8374.25586, 34.5933418, 2932.44995))
-                game:GetService("ReplicatedStorage").rEvents.machineInteractRemote:InvokeServer("useMachine", workspace.machinesFolder["Jungle Squat"].interactSeat)
-                task.wait(0.1)
-            end
-        end)
-    end
-end)
-
 local rebirths = window:AddTab("Rebirths")
 
 rebirths:AddTextBox("Rebirth Target", function(text)
