@@ -35,6 +35,7 @@ _G.autoFarmToggle = false
 _G.weightToggle = false
 _G.pushupsToggle = false
 _G.handstandsToggle = false
+_G.situpsToggle = false
 
 AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
     _G.autoFarmToggle = state
@@ -51,6 +52,10 @@ end)
 AutoFarm:AddSwitch("Handstands", function(state)
     _G.handstandsToggle = state
 end)
+
+AutoFarm:AddSwitch("Situps", function(state)
+        _G.situpsToggle = state
+    end)
 
 task.spawn(function()
     local muscleEvent = player:WaitForChild("muscleEvent")
@@ -106,6 +111,19 @@ task.spawn(function()
                 if handstands.Parent ~= character then
                     handstands.Parent = character
                 end
+
+             muscleEvent:FireServer("rep")
+                end
+            end
+                    
+            if _G.situpsToggle then
+                        local situps = character:FindFirstChild("Situps")
+                        or player.Backpack:FindFirstChild("Situps")
+
+                        if situps then
+                            if situps.Parent ~= character then
+                                situps.Parent = character
+                            end
 
                 muscleEvent:FireServer("rep")
             end
