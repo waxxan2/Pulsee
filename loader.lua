@@ -1181,3 +1181,94 @@ local showKillsButton = Killer:AddButton("Kill Counter UI", function()
 end)
 
 showKillsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local pets = window:AddTab("Pets")
+
+-- Pet Seçimi ve İşlemleri
+local selectedPet = "Neon Guardian"
+local petDropdown = pets:AddDropdown("Select Pet", function(text)
+    selectedPet = text
+end)
+
+local petList = {
+    "Neon Guardian", "Blue Birdie", "Blue Bunny", "Blue Firecaster", "Blue Pheonix",
+    "Crimson Falcon", "Cybernetic Showdown Dragon", "Dark Golem", "Dark Legends Manticore",
+    "Dark Vampy", "Darkstar Hunter", "Eternal Strike Leviathan", "Frostwave Legends Penguin",
+    "Gold Warrior", "Golden Pheonix", "Golden Viking", "Green Butterfly", "Green Firecaster",
+    "Infernal Dragon", "Lightning Strike Phantom", "Magic Butterfly", "Muscle Sensei",
+    "Orange Hedgehog", "Orange Pegasus", "Phantom Genesis Dragon", "Purple Dragon",
+    "Purple Falcon", "Red Dragon", "Red Firecaster", "Red Kitty", "Silver Dog",
+    "Ultimate Supernova Pegasus", "Ultra Birdie", "White Pegasus", "White Pheonix", "Yellow Butterfly"
+}
+
+for _, petName in ipairs(petList) do
+    petDropdown:Add(petName)
+end
+
+pets:AddSwitch("Auto Open Pet", function(bool)
+    _G.AutoHatchPet = bool
+    if bool then
+        task.spawn(function()
+            while _G.AutoHatchPet do
+                if selectedPet ~= "" then
+                    local folder = ReplicatedStorage:FindFirstChild("cPetShopFolder")
+                    local remote = ReplicatedStorage:FindFirstChild("cPetShopRemote")
+                    
+                    if folder and remote then
+                        local petToOpen = folder:FindFirstChild(selectedPet)
+                        if petToOpen then
+                            pcall(function()
+                                remote:InvokeServer(petToOpen)
+                            end)
+                        end
+                    end
+                end
+                task.wait(0.2) -- Sunucuya aşırı yük bindirmemek için bekleme süresi biraz artırıldı
+            end
+        end)
+    end
+end)
+
+-- Aura Seçimi ve İşlemleri
+local selectedAura = "Blue Aura"
+local auraDropdown = pets:AddDropdown("Select Aura", function(text)
+    selectedAura = text
+end)
+
+local auraList = {
+    "Astral Electro", "Azure Tundra", "Blue Aura", "Dark Electro", "Dark Lightning",
+    "Dark Storm", "Electro", "Enchanted Mirage", "Entropic Blast", "Eternal Megastrike",
+    "Grand Supernova", "Green Aura", "Inferno", "Lightning", "Muscle King",
+    "Power Lightning", "Purple Aura", "Purple Nova", "Red Aura", "Supernova",
+    "Ultra Inferno", "Ultra Mirage", "Unstable Mirage", "Yellow Aura"
+}
+
+for _, auraName in ipairs(auraList) do
+    auraDropdown:Add(auraName)
+end
+
+pets:AddSwitch("Auto Open Aura", function(bool)
+    _G.AutoHatchAura = bool
+    if bool then
+        task.spawn(function()
+            while _G.AutoHatchAura do
+                if selectedAura ~= "" then
+                    local folder = ReplicatedStorage:FindFirstChild("cPetShopFolder")
+                    local remote = ReplicatedStorage:FindFirstChild("cPetShopRemote")
+                    
+                    if folder and remote then
+                        local auraToOpen = folder:FindFirstChild(selectedAura)
+                        if auraToOpen then
+                            pcall(function()
+                                remote:InvokeServer(auraToOpen)
+                            end)
+                        end
+                    end
+                end
+                task.wait(0.2)
+            end
+        end)
+    end
+end)
+
