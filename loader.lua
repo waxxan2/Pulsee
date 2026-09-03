@@ -163,62 +163,6 @@ AutoFarm:AddSwitch("👊 Auto Punch", function(state)
     end
 end)
 
-ReplicatedStorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest");
-                task.wait(0.1); 
-            end; 
-        end); 
-    end; 
-end;
-targetSwitch = RebirthsWithoutPacksFolder:AddSwitch("Auto Rebirth Target", onAutoRebirthTarget);
-local infiniteSwitch = nil;
-local function onAutoRebirthInfinite(enabled)
-    _G.infiniteRebirthActive = enabled;
-    if enabled then
-        if _G.targetRebirthActive then
-            if targetSwitch then
-                targetSwitch:Set(false); 
-            end;
-            _G.targetRebirthActive = false; 
-        end;
-        task.spawn(function()
-            task.wait(0.1);
-            while _G.infiniteRebirthActive do
-                ReplicatedStorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest");
-                task.wait(0.1); 
-            end; 
-        end); 
-    end; 
-end;
-infiniteSwitch = RebirthsWithoutPacksFolder:AddSwitch("Auto Rebirth (Infinitely)", onAutoRebirthInfinite);
-local function onAutoSize2(enabled)
-    _G.autoSizeActive = enabled;
-    if enabled then
-        task.spawn(function()
-            task.wait();
-            while _G.autoSizeActive do
-                ReplicatedStorage.rEvents.changeSpeedSizeRemote:InvokeServer("changeSize", 2);
-                task.wait(0.1); 
-            end; 
-        end); 
-    end; 
-end;
-RebirthsWithoutPacksFolder:AddSwitch("Auto Size 2", onAutoSize2);
-local function onAutoTeleportMK(enabled)
-    _G.teleportActive = enabled;
-    if enabled then
-        task.spawn(function()
-            task.wait();
-            while _G.teleportActive do
-                if LocalPlayer.Character then
-                    LocalPlayer.Character:MoveTo(Vector3.new(-8646, 17, -5738)); 
-                end;
-                task.wait(0.5); 
-            end; 
-        end); 
-    end; 
-end;
-RebirthsWithoutPacksFolder:AddSwitch("Auto Teleport to Muscle King", onAutoTeleportMK);
-
 local farmTab = window:AddTab("Rock")
  
 local function gettool()
