@@ -54,8 +54,8 @@ AutoFarm:AddSwitch("🔥 Handstands", function(state)
 end)
 
 AutoFarm:AddSwitch("✨ Situps", function(state)
-        _G.situpsToggle = state
-    end)
+    _G.situpsToggle = state
+end)
 
 task.spawn(function()
     local muscleEvent = player:WaitForChild("muscleEvent")
@@ -112,32 +112,33 @@ task.spawn(function()
                     handstands.Parent = character
                 end
 
-             muscleEvent:FireServer("rep")
-                end
+                muscleEvent:FireServer("rep")
             end
+        end
                     
-            if _G.situpsToggle then
-                        local situps = character:FindFirstChild("Situps")
-                        or player.Backpack:FindFirstChild("Situps")
+        if _G.situpsToggle then
+            local situps = character:FindFirstChild("Situps")
+                or player.Backpack:FindFirstChild("Situps")
 
-                        if situps then
-                            if situps.Parent ~= character then
-                                situps.Parent = character
-                            end
+            if situps then
+                if situps.Parent ~= character then
+                    situps.Parent = character
+                end
 
                 muscleEvent:FireServer("rep")
             end
         end
     end
 end)
+
 AutoFarm:AddSwitch("👊 Auto Punch", function(state)
     _G.fastHitActive = state
     if state then
         task.spawn(function()
             while _G.fastHitActive do
-                local punch = LocalPlayer.Backpack:FindFirstChild("Punch")
+                local punch = player.Backpack:FindFirstChild("Punch")
                 if punch then
-                    punch.Parent = LocalPlayer.Character
+                    punch.Parent = player.Character
                     if punch:FindFirstChild("attackTime") then
                         punch.attackTime.Value = 0
                     end
@@ -147,7 +148,7 @@ AutoFarm:AddSwitch("👊 Auto Punch", function(state)
         end)
         task.spawn(function()
             while _G.fastHitActive do
-                local punch = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Punch")
+                local punch = player.Character and player.Character:FindFirstChild("Punch")
                 if punch then
                     punch:Activate()
                 end
@@ -155,9 +156,9 @@ AutoFarm:AddSwitch("👊 Auto Punch", function(state)
             end
         end)
     else
-        local punch = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Punch")
+        local punch = player.Character and player.Character:FindFirstChild("Punch")
         if punch then
-            punch.Parent = LocalPlayer.Backpack
+            punch.Parent = player.Backpack
         end
     end
 end)
