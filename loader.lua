@@ -262,6 +262,36 @@ local teleportSwitch = rebirths:AddSwitch("Auto Teleport to Muscle King", functi
     end
 end, "Tp to Mk")
 
+local function eatProteinEgg()
+    local player = game.Players.LocalPlayer
+    local backpack = player:WaitForChild("Backpack")
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local egg = backpack:FindFirstChild("Protein Egg")
+    if egg then
+        egg.Parent = character
+        pcall(function()
+            egg:Activate()
+        end)
+    end
+end
+
+task.spawn(function()
+    while true do
+        if autoEatEnabled then
+            eatProteinEgg()
+            task.wait(1800)
+        else
+            task.wait(1)
+        end
+    end
+end)
+
+AutoFarm:AddSwitch("Auto Eat Egg", function(state)
+    autoEatEnabled = state
+end)
+
+
 local farmTab = window:AddTab("Rock")
  
 local function gettool()
