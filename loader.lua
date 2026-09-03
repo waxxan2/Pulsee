@@ -41,19 +41,19 @@ AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
     _G.autoFarmToggle = state
 end)
 
-AutoFarm:AddSwitch("Weight", function(state)
+AutoFarm:AddSwitch("🏋️‍♀️ Weight", function(state)
     _G.weightToggle = state
 end)
 
-AutoFarm:AddSwitch("Pushups", function(state)
+AutoFarm:AddSwitch("💪 Pushups", function(state)
     _G.pushupsToggle = state
 end)
 
-AutoFarm:AddSwitch("Handstands", function(state)
+AutoFarm:AddSwitch("🔥 Handstands", function(state)
     _G.handstandsToggle = state
 end)
 
-AutoFarm:AddSwitch("Situps", function(state)
+AutoFarm:AddSwitch("✨ Situps", function(state)
         _G.situpsToggle = state
     end)
 
@@ -130,7 +130,7 @@ task.spawn(function()
         end
     end
 end)
-Kill:AddSwitch("Auto Punch", function(state)
+AutoFarm:AddSwitch("👊 Auto Punch", function(state)
     _G.fastHitActive = state
     if state then
         task.spawn(function()
