@@ -1182,6 +1182,7 @@ end)
 
 showKillsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+local Teleport: window:AddTab("Teleport")
 
 -- Tiny Island
 Tabs.Teleport:CreateButton({
