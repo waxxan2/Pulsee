@@ -162,6 +162,7 @@ AutoFarm:AddSwitch("👊 Auto Punch", function(state)
         end
     end
 end)
+
 Tabs.Main:AddSection("Auto Jungle")
 
 local jungleBenchToggle = Tabs.Main:CreateToggle("JungleBench", {Title = "Auto Jungle Bench", Default = false})
