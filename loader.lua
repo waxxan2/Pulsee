@@ -163,7 +163,6 @@ AutoFarm:AddSwitch("👊 Auto Punch", function(state)
     end
 end)
 
-
 local rebirths = window:AddTab("Rebirths")
 
 rebirths:AddTextBox("Rebirth Target", function(text)
