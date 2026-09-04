@@ -2753,7 +2753,7 @@ Misc:AddSwitch("⏳ Anti Afk", function(Value)
         BoostBtn.Position = UDim2.new(0.5, -85, 0, 150)
         BoostBtn.BackgroundColor3 = Color3.fromRGB(160, 90, 110)
         BoostBtn.Text = "FPS BOOST"
-        BoostBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        BoostBtn.TextColor3 = Color3.fromRGB(160, 90, 110)
         BoostBtn.Font = Enum.Font.GothamBold
         BoostBtn.TextSize = 14
         Instance.new("UICorner", BoostBtn).CornerRadius = UDim.new(0, 6)
