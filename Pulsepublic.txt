@@ -11,16 +11,17 @@ local repsPerTick = 1
 
 local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - " .. displayName, {
     title_bar = {
-       Color3.fromRGB(255, 182, 193), -- Açık pembe (Light Pink)
-    Color3.fromRGB(255, 105, 180), -- Canlı pembe tonu (Hot Pink)
-    Color3.fromRGB(200, 50, 100),  -- Koyu pembe geçiş tonu
+        Color3.fromRGB(160, 90, 110), -- Kapalı ve mat pembe
+    Color3.fromRGB(110, 50, 70),  -- Koyu gül kurusu tonu
+    Color3.fromRGB(60, 20, 35),   -- Siyaha yakın koyu pembe geçiş
 },
 title_bar_transparency = 0.1,
 background = {
-    Color3.fromRGB(40, 20, 30),    -- Pembe alt tonlu koyu arkaplan
-    Color3.fromRGB(60, 30, 45),    -- Arkaplan geçişi
-    Color3.fromRGB(20, 10, 15)     -- Koyu bitiş tonu
+    Color3.fromRGB(30, 15, 20),   -- Çok koyu pembe-gri arkaplan
+    Color3.fromRGB(45, 20, 30),   -- Arkaplan geçişi
+    Color3.fromRGB(15, 5, 10)     -- Neredeyse siyah koyu ton
 },
+
 
     background_transparency = 0.1,
     main_color = Color3.fromRGB(50, 180, 255),
