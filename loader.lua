@@ -30,8 +30,6 @@ local window = library:AddWindow("Pulse Hub Public | Muscle Legends || Hello - "
 _G.window = window
 
 local AutoFarm = window:AddTab("Farm")
-
-local AutoFarm = window:AddTab("Farm")
 AutoFarm:AddLabel("Tools Farm")
 
 local repsPerTick = 1
