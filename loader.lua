@@ -31,135 +31,348 @@ _G.window = window
 
 local AutoFarm = window:AddTab("Farm")
 
-_G.autoFarmToggle = false
-_G.weightToggle = false
-_G.pushupsToggle = false
-_G.handstandsToggle = false
-_G.situpsToggle = false
+local AutoFarm = window:AddTab("Farm")
+AutoFarm:AddLabel("Tools Farm")
 
+local repsPerTick = 1
+
+AutoFarm:AddTextBox("🚀 Thread Speed", function(value)
+    local num = tonumber(value)
+    if num and num > 0 then 
+        repsPerTick = math.floor(num)
+    else
+        repsPerTick = 1
+    end
+end, {placeholder = "Enter Amount (Default: 1)"})
+
+_G.repToggle = false
 AutoFarm:AddSwitch("💪 Auto Farm (Equip Any tool)", function(state)
-    _G.autoFarmToggle = state
-end)
-
-AutoFarm:AddSwitch("🏋️‍♀️ Weight", function(state)
-    _G.weightToggle = state
-end)
-
-AutoFarm:AddSwitch("💪 Pushups", function(state)
-    _G.pushupsToggle = state
-end)
-
-AutoFarm:AddSwitch("🔥 Handstands", function(state)
-    _G.handstandsToggle = state
-end)
-
-AutoFarm:AddSwitch("✨ Situps", function(state)
-    _G.situpsToggle = state
-end)
-
-task.spawn(function()
-    local muscleEvent = player:WaitForChild("muscleEvent")
-
-    while task.wait(0.1) do
-        local character = player.Character
-
-        if not character then
-            continue
-        end
-
-        if _G.autoFarmToggle then
-            for i = 1, repsPerTick do
-                if not _G.autoFarmToggle then
-                    break
+    _G.repToggle = state
+    task.spawn(function()
+        while _G.repToggle do
+            local event = game:GetService("Players").LocalPlayer:FindFirstChild("muscleEvent")
+            if event then
+                for i = 1, repsPerTick do
+                    if not _G.repToggle then break end
+                    event:FireServer("rep")
                 end
-
-                muscleEvent:FireServer("rep")
             end
+            task.wait(0.01)
         end
+    end)
+end)
 
-        if _G.weightToggle then
-            local weight = character:FindFirstChild("Weight")
-                or player.Backpack:FindFirstChild("Weight")
-
-            if weight then
-                if weight.Parent ~= character then
-                    weight.Parent = character
-                end
-
-                muscleEvent:FireServer("rep")
-            end
-        end
-
-        if _G.pushupsToggle then
-            local pushups = character:FindFirstChild("Pushups")
-                or player.Backpack:FindFirstChild("Pushups")
-
-            if pushups then
-                if pushups.Parent ~= character then
-                    pushups.Parent = character
-                end
-
-                muscleEvent:FireServer("rep")
-            end
-        end
-
-        if _G.handstandsToggle then
-            local handstands = character:FindFirstChild("Handstands")
-                or player.Backpack:FindFirstChild("Handstands")
-
-            if handstands then
-                if handstands.Parent ~= character then
-                    handstands.Parent = character
-                end
-
-                muscleEvent:FireServer("rep")
-            end
-        end
+local function manageTool(toolName)
+    task.spawn(function()
+        while _G[toolName.."On"] do
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            if character then
+                local tool = player.Backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
+                
+                if tool then
+                    if tool.Parent ~= character then
+                        tool.Parent = character
+                    end
                     
-        if _G.situpsToggle then
-            local situps = character:FindFirstChild("Situps")
-                or player.Backpack:FindFirstChild("Situps")
+                    local event = player:FindFirstChild("muscleEvent")
+                    if event then
+                        for i = 1, repsPerTick do
+                            if not _G[toolName.."On"] then break end
+                            event:FireServer("rep")
+                        end
+                    else
+                        tool:Activate()
+                    end
+                end
+            end
+            task.wait(0.01)
+        end
+    end)
+end
 
-            if situps then
-                if situps.Parent ~= character then
-                    situps.Parent = character
+AutoFarm:AddSwitch("🏋️ Weight", function(bool)
+    _G.WeightOn = bool
+    if bool then manageTool("Weight") end
+end)
+
+AutoFarm:AddSwitch("💪 Pushups", function(bool)
+    _G.PushupsOn = bool
+    if bool then manageTool("Pushups") end
+end)
+
+AutoFarm:AddSwitch("🤸 Handstands", function(bool)
+    _G.HandstandsOn = bool
+    if bool then manageTool("Handstands") end
+end)
+
+AutoFarm:AddSwitch("🧘 Situps", function(bool)
+    _G.SitupsOn = bool
+    if bool then manageTool("Situps") end
+end)
+
+AutoFarm:AddLabel("----------------------------")
+AutoFarm:AddLabel("💨 Treadmill Farm")
+
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Player = Players.LocalPlayer
+
+local Locations = {
+    {name = "🏭 Industrial Treadmill +20 xp", pos = Vector3.new(-4989.90, 81.62, 5414.85)},
+    {name = "🌿 Jungle Treadmill +8 xp", pos = Vector3.new(-8131.86, 25.77, 2818.17)},
+    {name = "🔱 Legends Treadmill +7 xp", pos = Vector3.new(4365.82, 997.14, -3632.9)},
+    {name = "✨ Mythical Treadmill +6 xp", pos = Vector3.new(2661.67, 19.41, 932.09)},
+    {name = "🏠 Spawn Treadmill +5 xp", pos = Vector3.new(-230.43, 8.16, -102.18)},
+    {name = "👟 Tiny Treadmill +1 xp", pos = Vector3.new(55.64, 5.16, 1947.60)}
+}
+
+local posLockConnection = nil
+
+local function lockAndSimulate(targetCFrame)
+    if posLockConnection then posLockConnection:Disconnect() end
+    posLockConnection = RunService.Heartbeat:Connect(function()
+        if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+            Player.Character.HumanoidRootPart.CFrame = targetCFrame
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
+        end
+    end)
+end
+
+local function stopAll()
+    if posLockConnection then
+        posLockConnection:Disconnect()
+        posLockConnection = nil
+    end
+    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
+end
+
+for _, loc in ipairs(Locations) do
+    AutoFarm:AddSwitch(loc.name, function(bool)
+        if bool then
+            local hrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                hrp.CFrame = CFrame.new(loc.pos + Vector3.new(0, 3, 0))
+                task.wait(0.3)
+                lockAndSimulate(hrp.CFrame)
+            end
+        else
+            stopAll()
+        end
+    end)
+end
+
+AutoFarm:AddLabel("----------------------------")
+AutoFarm:AddLabel("🕹️ Industrial Gym Farm")
+
+local VIM = game:GetService("VirtualInputManager")
+
+local function pressEKey()
+    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+    task.wait(0.01)
+    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+end
+
+local function startJungleFarm(toggleName, cframeValue, eventName)
+    local active = false
+    AutoFarm:AddSwitch(toggleName, function(bool)
+        active = bool
+        if bool then
+            task.spawn(function()
+                while active do
+                    local char = game.Players.LocalPlayer.Character
+                    local root = char and char:FindFirstChild("HumanoidRootPart")
+                    
+                    if root then
+                        if (root.Position - cframeValue.p).Magnitude > 5 then
+                            root.CFrame = cframeValue
+                            task.wait(0.3)
+                            pressEKey()
+                        end
+                        
+                        game:GetService("Players").LocalPlayer.muscleEvent:FireServer(eventName)
+                    end
+                    task.wait(0.01)
+                end
+            end)
+        end
+    end)
+end
+
+startJungleFarm("⚙️ Auto Industrial Bar Lift", CFrame.new(-5492.24, 81.82, 4644.04), "rep")
+startJungleFarm("🏋️ Auto Industrial Bench", CFrame.new(-5014.39, 111.46, 4462.90), "rep")
+startJungleFarm("🦵 Auto Industrial Squat", CFrame.new(-5216.36, 90.17, 5420.08), "rep")
+startJungleFarm("💢 Auto Industrial Boulder", CFrame.new(-5452.94, 84.47, 5232.03), "rep")
+
+AutoFarm:AddLabel("----------------------------")
+AutoFarm:AddLabel("⚡ OP Tools")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local function manageToolCombo(toolName)
+    task.spawn(function()
+        while _G[toolName.."On"] do
+            local character = LocalPlayer.Character
+            local hum = character and character:FindFirstChildOfClass("Humanoid")
+            
+            if character and hum then
+                local punch = LocalPlayer.Backpack:FindFirstChild("Punch") or character:FindFirstChild("Punch")
+                local tool = LocalPlayer.Backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
+
+                if punch then
+                    if punch.Parent ~= character then
+                        hum:EquipTool(punch)
+                    end
+                    if punch:FindFirstChild("attackTime") then 
+                        punch.attackTime.Value = 0 
+                    end
+                    punch:Activate()
                 end
 
-                muscleEvent:FireServer("rep")
+                if tool then
+                    if tool.Parent ~= character then
+                        hum:EquipTool(tool)
+                    end
+                    
+                    local event = LocalPlayer:FindFirstChild("muscleEvent")
+                    if event then 
+                        event:FireServer("rep") 
+                    end
+                    tool:Activate()
+                end
+            end
+            task.wait(0.01)
+        end
+    end)
+end
+
+AutoFarm:AddSwitch("🏋️ Weight + 🥊 Punch", function(bool)
+    _G.WeightOn = bool
+    if bool then manageToolCombo("Weight") end
+end)
+
+AutoFarm:AddSwitch("💪 Pushups + 🥊 Punch", function(bool)
+    _G.PushupsOn = bool
+    if bool then manageToolCombo("Pushups") end
+end)
+
+AutoFarm:AddSwitch("🤸 Handstand + 🥊 Punch", function(bool)
+    _G.HandstandOn = bool
+    if bool then manageToolCombo("Handstand") end
+end)
+
+AutoFarm:AddSwitch("🧘 Situps + 🥊 Punch", function(bool)
+    _G.SitupsOn = bool
+    if bool then manageToolCombo("Situps") end
+end)
+
+AutoFarm:AddLabel("----------------------------")
+AutoFarm:AddLabel("💢 Brawl")
+
+local autoBrawl = false
+local godModeToggle = false
+local autoWinBrawl = false
+local parts = {}
+
+local function manageParts(state)
+    if state and #parts == 0 then
+        local partSize = 2048
+        local totalDistance = 50000
+        local startPosition = Vector3.new(-2, -9.5, -2)
+        local numberOfParts = math.ceil(totalDistance / partSize)
+        for x = 0, numberOfParts - 1 do
+            for z = 0, numberOfParts - 1 do
+                local positions = {
+                    startPosition + Vector3.new(x * partSize, 0, z * partSize),
+                    startPosition + Vector3.new(-x * partSize, 0, z * partSize),
+                    startPosition + Vector3.new(-x * partSize, 0, -z * partSize),
+                    startPosition + Vector3.new(x * partSize, 0, -z * partSize)
+                }
+                for _, pos in ipairs(positions) do
+                    local p = Instance.new("Part")
+                    p.Size = Vector3.new(partSize, 1, partSize)
+                    p.Position = pos
+                    p.Anchored = true
+                    p.Transparency = 1
+                    p.CanCollide = true
+                    p.Parent = workspace
+                    table.insert(parts, p)
+                end
             end
         end
+    elseif not state then
+        for _, p in ipairs(parts) do p.CanCollide = false end
+    else
+        for _, p in ipairs(parts) do p.CanCollide = true end
+    end
+end
+
+AutoFarm:AddLabel("----------------------------")
+AutoFarm:AddLabel("👊 Auto Brawl")
+
+AutoFarm:AddSwitch("🏆 Auto Join Brawl", function(state)
+    autoBrawl = state
+    task.spawn(function()
+        while autoBrawl do
+            game:GetService("ReplicatedStorage").rEvents.brawlEvent:FireServer("joinBrawl")
+            task.wait(5)
+        end
+    end)
+end)
+
+AutoFarm:AddSwitch("🛡️ God Mode", function(state)
+    godModeToggle = state
+    manageParts(state)
+    if state then
+        task.spawn(function()
+            while godModeToggle do
+                game:GetService("ReplicatedStorage").rEvents.brawlEvent:FireServer("joinBrawl")
+                task.wait(0)
+            end
+        end)
     end
 end)
 
-AutoFarm:AddSwitch("👊 Auto Punch", function(state)
-    _G.fastHitActive = state
+AutoFarm:AddSwitch("⚔️ Auto Win Brawl", function(state)
+    autoWinBrawl = state
     if state then
         task.spawn(function()
-            while _G.fastHitActive do
-                local punch = player.Backpack:FindFirstChild("Punch")
-                if punch then
-                    punch.Parent = player.Character
-                    if punch:FindFirstChild("attackTime") then
-                        punch.attackTime.Value = 0
+            while autoWinBrawl do
+                local lp = game:GetService("Players").LocalPlayer
+                local char = lp.Character
+                if char then
+                    local punch = lp.Backpack:FindFirstChild("Punch") or char:FindFirstChild("Punch")
+                    if punch then
+                        punch.Parent = char
+                        if punch:FindFirstChild("attackTime") then
+                            punch.attackTime.Value = 0
+                        end
+                        punch:Activate()
+                    end
+                    
+                    local rHand = char:FindFirstChild("RightHand")
+                    local lHand = char:FindFirstChild("LeftHand")
+                    if rHand and lHand then
+                        for _, target in ipairs(game:GetService("Players"):GetPlayers()) do
+                            if target ~= lp and target.Character then
+                                local root = target.Character:FindFirstChild("HumanoidRootPart")
+                                if root then
+                                    pcall(function()
+                                        firetouchinterest(rHand, root, 1)
+                                        firetouchinterest(lHand, root, 1)
+                                        firetouchinterest(rHand, root, 0)
+                                        firetouchinterest(lHand, root, 0)
+                                    end)
+                                end
+                            end
+                        end
                     end
                 end
-                task.wait(0.1)
+                task.wait()
             end
         end)
-        task.spawn(function()
-            while _G.fastHitActive do
-                local punch = player.Character and player.Character:FindFirstChild("Punch")
-                if punch then
-                    punch:Activate()
-                end
-                task.wait(0.1)
-            end
-        end)
-    else
-        local punch = player.Character and player.Character:FindFirstChild("Punch")
-        if punch then
-            punch.Parent = player.Backpack
-        end
     end
 end)
 
