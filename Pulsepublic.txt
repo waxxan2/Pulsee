@@ -2751,7 +2751,7 @@ Misc:AddSwitch("⏳ Anti Afk", function(Value)
         local BoostBtn = Instance.new("TextButton", MainFrame)
         BoostBtn.Size = UDim2.new(0, 170, 0, 40)
         BoostBtn.Position = UDim2.new(0.5, -85, 0, 150)
-        BoostBtn.BackgroundColor3 = Color3.fromRGB(160, 0, 0)
+        BoostBtn.BackgroundColor3 = Color3.fromRGB(160, 90, 110)
         BoostBtn.Text = "FPS BOOST"
         BoostBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         BoostBtn.Font = Enum.Font.GothamBold
