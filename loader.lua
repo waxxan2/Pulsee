@@ -1394,23 +1394,62 @@ end)
 showKillsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local pets = window:AddTab("Pets")
 
--- Pet Seçimi ve İşlemleri
-local selectedPet = "Neon Guardian"
-local petDropdown = pets:AddDropdown("Select Pet", function(text)
-    selectedPet = text
+local pets = window:AddTab("Pets")
+pets:AddLabel("💰 Auto Buy")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local rEvents = ReplicatedStorage:WaitForChild("rEvents")
+
+local selectedPet = "Orange Hedgehog"
+local autoHatchPet = false
+
+local petDropdown = pets:AddDropdown("🐢 Select Pet", function(text)
+    selectedPet = text:match("^(.-)%s*%(.-%)$") or text
 end)
 
 local petList = {
-    "Neon Guardian", "Blue Birdie", "Blue Bunny", "Blue Firecaster", "Blue Pheonix",
-    "Crimson Falcon", "Cybernetic Showdown Dragon", "Dark Golem", "Dark Legends Manticore",
-    "Dark Vampy", "Darkstar Hunter", "Eternal Strike Leviathan", "Frostwave Legends Penguin",
-    "Gold Warrior", "Golden Pheonix", "Golden Viking", "Green Butterfly", "Green Firecaster",
-    "Infernal Dragon", "Lightning Strike Phantom", "Magic Butterfly", "Muscle Sensei",
-    "Orange Hedgehog", "Orange Pegasus", "Phantom Genesis Dragon", "Purple Dragon",
-    "Purple Falcon", "Red Dragon", "Red Firecaster", "Red Kitty", "Silver Dog",
-    "Ultimate Supernova Pegasus", "Ultra Birdie", "White Pegasus", "White Pheonix", "Yellow Butterfly"
+    "Orange Hedgehog (Basic)",
+    "Silver Dog (Basic)",
+    "Red Kitty (Basic)",
+    "Blue Birdie (Basic)",
+    "Blue Bunny (Basic)",
+    "Core Pup (Basic)",
+    "Green Butterfly (Rare)",
+    "Yellow Butterfly (Rare)",
+    "Magic Butterfly (Rare)",
+    "Volt Talon (Rare)",
+    "Red Dragon (Epic)",
+    "Purple Dragon (Epic)",
+    "Blue Firecaster (Epic)",
+    "Red Firecaster (Epic)",
+    "Green Firecaster (Epic)",
+    "Reactor Bea (Epic)",
+    "Golden Viking (Legendary)",
+    "Gold Warrior (Legendary)",
+    "Infernal Dragon (Legendary)",
+    "Dark Golem (Legendary)",
+    "Muscle Sensei (Legendary)",
+    "Plasma Ravager (Legendary)",
+    "Orange Pegasus (Unique)",
+    "White Pegasus (Unique)",
+    "Blue Pheonix (Unique)",
+    "Golden Pheonix (Unique)",
+    "White Pheonix (Unique)",
+    "Crimson Falcon (Unique)",
+    "Purple Falcon (Unique)",
+    "Ultra Birdie (Unique)",
+    "Dark Vampy (Unique)",
+    "Frostwave Legends Penguin (Unique)",
+    "Dark Legends Manticore (Unique)",
+    "Darkstar Hunter (Unique)",
+    "Lightning Strike Phantom (Unique)",
+    "Cybernetic Showdown Dragon (Unique)",
+    "Phantom Genesis Dragon (Unique)",
+    "Eternal Strike Leviathan (Unique)",
+    "Ultimate Supernova Pegasus (Unique)",
+    "Titan Reactor (Unique)",
+    "Neon Guardian (Unique)",
+    "Apex Overlord (Unique)"
 }
 
 for _, petName in ipairs(petList) do
@@ -1418,41 +1457,63 @@ for _, petName in ipairs(petList) do
 end
 
 pets:AddSwitch("Auto Open Pet", function(bool)
-    _G.AutoHatchPet = bool
+    autoHatchPet = bool
     if bool then
-        task.spawn(function()
-            while _G.AutoHatchPet do
-                if selectedPet ~= "" then
-                    local folder = ReplicatedStorage:FindFirstChild("cPetShopFolder")
-                    local remote = ReplicatedStorage:FindFirstChild("cPetShopRemote")
-                    
-                    if folder and remote then
-                        local petToOpen = folder:FindFirstChild(selectedPet)
-                        if petToOpen then
-                            pcall(function()
-                                remote:InvokeServer(petToOpen)
-                            end)
-                        end
-                    end
+        spawn(function()
+            while autoHatchPet and selectedPet ~= "" do
+                local petShopRemote = rEvents:FindFirstChild("cPetShopRemote") or ReplicatedStorage:FindFirstChild("cPetShopRemote")
+                
+                local runtimeFolder = ReplicatedStorage:FindFirstChild("shared") 
+                    and ReplicatedStorage.shared:FindFirstChild("runtime") 
+                    and ReplicatedStorage.shared.runtime:FindFirstChild("cPetShopFolder")
+                
+                local petToOpen = runtimeFolder and runtimeFolder:FindFirstChild(selectedPet)
+                
+                if petToOpen and petShopRemote then
+                    pcall(function()
+                        petShopRemote:InvokeServer(petToOpen)
+                    end)
                 end
-                task.wait(0.2) -- Sunucuya aşırı yük bindirmemek için bekleme süresi biraz artırıldı
+                task.wait(0.1)
             end
         end)
     end
 end)
 
--- Aura Seçimi ve İşlemleri
+pets:AddLabel("💫 Auto Buy Aura")
+
 local selectedAura = "Blue Aura"
-local auraDropdown = pets:AddDropdown("Select Aura", function(text)
-    selectedAura = text
+local autoHatchAura = false
+
+local auraDropdown = pets:AddDropdown("💫 Select Aura", function(text)
+    selectedAura = text:match("^(.-)%s*%(.-%)$") or text
 end)
 
 local auraList = {
-    "Astral Electro", "Azure Tundra", "Blue Aura", "Dark Electro", "Dark Lightning",
-    "Dark Storm", "Electro", "Enchanted Mirage", "Entropic Blast", "Eternal Megastrike",
-    "Grand Supernova", "Green Aura", "Inferno", "Lightning", "Muscle King",
-    "Power Lightning", "Purple Aura", "Purple Nova", "Red Aura", "Supernova",
-    "Ultra Inferno", "Ultra Mirage", "Unstable Mirage", "Yellow Aura"
+    "Blue Aura (Basic)",
+    "Green Aura (Basic)",
+    "Yellow Aura (Basic)",
+    "Purple Aura (Basic)",
+    "Red Aura (Basic)",
+    "Electro (Rare)",
+    "Lightning (Rare)",
+    "Dark Electro (Rare)",
+    "Dark Lightning (Rare)",
+    "Azure Tundra (Epic)",
+    "Dark Storm (Epic)",
+    "Inferno (Epic)",
+    "Muscle King (Epic)",
+    "Power Lightning (Epic)",
+    "Purple Nova (Epic)",
+    "Supernova (Legendary)",
+    "Ultra Inferno (Legendary)",
+    "Enchanted Mirage (Unique)",
+    "Astral Electro (Unique)",
+    "Eternal Megastrike (Unique)",
+    "Grand Supernova (Unique)",
+    "Entropic Blast (Unique)",
+    "Ultra Mirage (Unique)",
+    "Unstable Mirage (Unique)"
 }
 
 for _, auraName in ipairs(auraList) do
@@ -1460,28 +1521,324 @@ for _, auraName in ipairs(auraList) do
 end
 
 pets:AddSwitch("Auto Open Aura", function(bool)
-    _G.AutoHatchAura = bool
+    autoHatchAura = bool
     if bool then
-        task.spawn(function()
-            while _G.AutoHatchAura do
-                if selectedAura ~= "" then
-                    local folder = ReplicatedStorage:FindFirstChild("cPetShopFolder")
-                    local remote = ReplicatedStorage:FindFirstChild("cPetShopRemote")
-                    
-                    if folder and remote then
-                        local auraToOpen = folder:FindFirstChild(selectedAura)
-                        if auraToOpen then
-                            pcall(function()
-                                remote:InvokeServer(auraToOpen)
-                            end)
-                        end
-                    end
+        spawn(function()
+            while autoHatchAura and selectedAura ~= "" do
+                local petShopRemote = rEvents:FindFirstChild("cPetShopRemote") or ReplicatedStorage:FindFirstChild("cPetShopRemote")
+                
+                local runtimeFolder = ReplicatedStorage:FindFirstChild("shared") 
+                    and ReplicatedStorage.shared:FindFirstChild("runtime") 
+                    and ReplicatedStorage.shared.runtime:FindFirstChild("cPetShopFolder")
+                
+                local auraToOpen = runtimeFolder and runtimeFolder:FindFirstChild(selectedAura)
+                
+                if auraToOpen and petShopRemote then
+                    pcall(function()
+                        petShopRemote:InvokeServer(auraToOpen)
+                    end)
                 end
-                task.wait(0.2)
+                task.wait(0.1)
             end
         end)
     end
 end)
+
+pets:AddLabel("----------------------------")
+pets:AddLabel("✨ Auto Evolve Pet")
+
+local pets = pets
+local selectedEvolvePet = ""
+local autoEvolvePet = false
+
+local evolvePetDropdown = pets:AddDropdown("🐾 Select Pet to Evolve", function(text)
+    selectedEvolvePet = text:match("^(.-)%s*%(.-%)$") or text
+end)
+
+local evolveList = {
+    -- Basic
+    "Orange Hedgehog (Basic)",
+    "Silver Dog (Basic)",
+    "Red Kitty (Basic)",
+    "Blue Birdie (Basic)",
+    "Blue Bunny (Basic)",
+    "Core Pup (Basic)",
+    "Blue Aura (Basic)",
+    "Green Aura (Basic)",
+    "Purple Aura (Basic)",
+    "Red Aura (Basic)",
+    "Yellow Aura (Basic)",
+
+    -- Advanced
+    "Dark Vampy (Advanced)",
+    "Dark Golem (Advanced)",
+    "Green Butterfly (Advanced)",
+    "Yellow Butterfly (Advanced)",
+
+    -- Rare
+    "Crimson Falcon (Rare)",
+    "Purple Dragon (Rare)",
+    "Orange Pegasus (Rare)",
+    "Purple Falcon (Rare)",
+    "Red Dragon (Rare)",
+    "White Pegasus (Rare)",
+    "Frostwave Legends Penguin (Rare)",
+    "Phantom Genesis Dragon (Rare)",
+    "Eternal Strike Leviathan (Rare)",
+    "Volt Talon (Rare)",
+    "Magic Butterfly (Rare)",
+    "Blue Firecaster (Rare)",
+    "Red Firecaster (Rare)",
+    "Green Firecaster (Rare)",
+    "Ultra Inferno (Rare)",
+
+    -- Epic
+    "Blue Pheonix (Epic)",
+    "Golden Pheonix (Epic)",
+    "White Pheonix (Epic)",
+    "Dark Legends Manticore (Epic)",
+    "Ultimate Supernova Pegasus (Epic)",
+    "Lightning Strike Phantom (Epic)",
+    "Golden Viking (Epic)",
+    "Reactor Bea (Epic)",
+    "Gold Warrior (Epic)",
+    "Azure Tundra (Epic)",
+    "Grand Supernova (Epic)",
+
+    -- Unique
+    "Infernal Dragon (Unique)",
+    "Ultra Birdie (Unique)",
+    "Aether Spirit Bunny (Unique)",
+    "Cybernetic Showdown Dragon (Unique)",
+    "Darkstar Hunter (Unique)",
+    "Muscle Sensei (Unique)",
+    "Neon Guardian (Unique)",
+    "Apex Overlord (Unique)",
+    "Plasma Ravager (Unique)",
+    "Titan Reactor (Unique)",
+    "Muscle King (Unique)",
+    "Entropic Blast (Unique)",
+    "Eternal Megastrike (Unique)"
+}
+
+for _, item in ipairs(evolveList) do
+    evolvePetDropdown:Add(item)
+end
+
+pets:AddSwitch("🎯 Auto Evolve Selected Pet", function(state)
+    autoEvolvePet = state
+    if state then
+        if selectedEvolvePet == "" then
+            return
+        end
+        local petName = selectedEvolvePet:match("^(.-)%s*%(")
+        if not petName then
+            petName = selectedEvolvePet
+        end
+        task.spawn(function()
+            local maxAttempts = 1000
+            while autoEvolvePet do
+                pcall(function()
+                    game:GetService("ReplicatedStorage").rEvents.petEvolveEvent:FireServer(
+                        "evolvePet",
+                        petName
+                    )
+                end)
+                task.wait(0.5)
+                if maxAttempts <= 0 then
+                    autoEvolvePet = false
+                    break
+                end
+                maxAttempts = maxAttempts - 1
+            end
+        end)
+    end
+end)
+
+pets:AddButton("⚡ Quick Evolve (1x)", function()
+    if selectedEvolvePet == "" then
+        return
+    end
+    local petName = selectedEvolvePet:match("^(.-)%s*%(")
+    if not petName then
+        petName = selectedEvolvePet
+    end
+    pcall(function()
+        game:GetService("ReplicatedStorage").rEvents.petEvolveEvent:FireServer(
+            "evolvePet",
+            petName
+        )
+    end)
+end)
+
+pets:AddButton("💥 Quick Evolve (10x)", function()
+    if selectedEvolvePet == "" then
+        return
+    end
+    local petName = selectedEvolvePet:match("^(.-)%s*%(")
+    if not petName then
+        petName = selectedEvolvePet
+    end
+    for i = 1, 10 do
+        pcall(function()
+            game:GetService("ReplicatedStorage").rEvents.petEvolveEvent:FireServer(
+                "evolvePet",
+                petName
+            )
+        end)
+        task.wait(0.1)
+    end
+end)
+
+pets:AddLabel("----------------------------")
+pets:AddLabel("💎 Trade System")
+
+local running = false
+local selectedTarget = nil
+local selectedPet = nil
+
+local playerDropdown = pets:AddDropdown("👤 Choose Player", function(name)
+    local username = name:match(" | (.+)") or name
+    selectedTarget = game:GetService("Players"):FindFirstChild(username)
+end)
+
+local function updatePlayerList(p)
+    if p ~= game:GetService("Players").LocalPlayer then
+        playerDropdown:Add(p.DisplayName .. " | " .. p.Name)
+    end
+end
+
+for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+    updatePlayerList(player)
+end
+
+game:GetService("Players").PlayerAdded:Connect(updatePlayerList)
+
+local petDropdown = pets:AddDropdown("🐈 Choose Pet", function(text) 
+    selectedPet = text:match("^(.-)%s*%(.-%)$") or text 
+end)
+
+local petList = {
+    -- Basic
+    "Orange Hedgehog (Basic)",
+    "Silver Dog (Basic)",
+    "Red Kitty (Basic)",
+    "Blue Birdie (Basic)",
+    "Blue Bunny (Basic)",
+    "Core Pup (Basic)",
+    "Blue Aura (Basic)",
+    "Green Aura (Basic)",
+    "Purple Aura (Basic)",
+    "Red Aura (Basic)",
+    "Yellow Aura (Basic)",
+
+    -- Advanced
+    "Dark Vampy (Advanced)",
+    "Dark Golem (Advanced)",
+    "Green Butterfly (Advanced)",
+    "Yellow Butterfly (Advanced)",
+
+    -- Rare
+    "Crimson Falcon (Rare)",
+    "Purple Dragon (Rare)",
+    "Orange Pegasus (Rare)",
+    "Purple Falcon (Rare)",
+    "Red Dragon (Rare)",
+    "White Pegasus (Rare)",
+    "Frostwave Legends Penguin (Rare)",
+    "Phantom Genesis Dragon (Rare)",
+    "Eternal Strike Leviathan (Rare)",
+    "Volt Talon (Rare)",
+    "Magic Butterfly (Rare)",
+    "Blue Firecaster (Rare)",
+    "Red Firecaster (Rare)",
+    "Green Firecaster (Rare)",
+    "Ultra Inferno (Rare)",
+
+    -- Epic
+    "Blue Pheonix (Epic)",
+    "Golden Pheonix (Epic)",
+    "White Pheonix (Epic)",
+    "Dark Legends Manticore (Epic)",
+    "Ultimate Supernova Pegasus (Epic)",
+    "Lightning Strike Phantom (Epic)",
+    "Golden Viking (Epic)",
+    "Reactor Bea (Epic)",
+    "Gold Warrior (Epic)",
+    "Azure Tundra (Epic)",
+    "Grand Supernova (Epic)",
+
+    -- Unique
+    "Infernal Dragon (Unique)",
+    "Ultra Birdie (Unique)",
+    "Aether Spirit Bunny (Unique)",
+    "Cybernetic Showdown Dragon (Unique)",
+    "Darkstar Hunter (Unique)",
+    "Muscle Sensei (Unique)",
+    "Neon Guardian (Unique)",
+    "Apex Overlord (Unique)",
+    "Plasma Ravager (Unique)",
+    "Titan Reactor (Unique)",
+    "Muscle King (Unique)",
+    "Entropic Blast (Unique)",
+    "Eternal Megastrike (Unique)"
+}
+
+for _, name in ipairs(petList) do 
+    petDropdown:Add(name) 
+end
+
+pets:AddSwitch("📫 Auto Trade", function(state)
+    running = state
+    if not state then return end
+
+    task.spawn(function()
+        while running do
+            if selectedTarget and selectedPet then
+                local tradingEvent = game:GetService("ReplicatedStorage").rEvents.tradingEvent
+                local localPlayer = game:GetService("Players").LocalPlayer
+                local pf = localPlayer:FindFirstChild("petsFolder")
+
+                if pf then
+                    local folders = {
+                        pf:FindFirstChild("Basic"),
+                        pf:FindFirstChild("Advanced"),
+                        pf:FindFirstChild("Rare"),
+                        pf:FindFirstChild("Epic"),
+                        pf:FindFirstChild("Unique")
+                    }
+
+                    tradingEvent:FireServer("sendTradeRequest", selectedTarget)
+                    task.wait(1.5) 
+
+                    local offered = 0
+                    
+                    for _, folder in ipairs(folders) do
+                        if folder and running and offered < 6 then
+                            local petsToOffer = folder:GetChildren()
+                            for i = 1, #petsToOffer do
+                                local pet = petsToOffer[i]
+                                if not running or offered >= 6 then break end
+
+                                if pet.Name == selectedPet then
+                                    tradingEvent:FireServer("offerItem", pet)
+                                    offered = offered + 1
+                                    task.wait(0.1) 
+                                end
+                            end
+                        end
+                    end
+
+                    if running then
+                        tradingEvent:FireServer("acceptTrade")
+                    end
+                end
+            end
+            task.wait(1) 
+        end
+    end)
+end)
+
 
 local Gift = window:AddTab("Gift")
 Gift:AddLabel("Gifting Protein egg:").TextSize = 22
