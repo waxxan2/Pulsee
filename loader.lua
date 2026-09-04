@@ -3100,3 +3100,53 @@ player.CharacterAdded:Connect(function()
     end
 end)
 
+local credits = window:AddTab("Credits")
+
+local title = credits:AddLabel("🔥 PULSE HUB V1 ")
+title.TextColor3 = Color3.fromRGB(255, 215, 0)
+
+local dev = credits:AddLabel("👤 Developer: WOZZY")
+dev.TextColor3 = Color3.fromRGB(255, 50, 50)
+
+credits:AddLabel("--------------------------")
+
+local thanks = credits:AddLabel("🤝 Special Thanks to: Halis & RuLing")
+thanks.TextColor3 = Color3.fromRGB(0, 255, 255)
+
+local support = credits:AddLabel("❤️ Thanks for the support!")
+support.TextColor3 = Color3.fromRGB(255, 105, 180)
+
+credits:AddLabel("--------------------------")
+
+local useMsg = credits:AddLabel("🙏 Thank you for using Pulse hub!")
+useMsg.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+credits:AddLabel("👇 My Discord Server Link Here")
+
+credits:AddButton("Discord Link", function()
+    setclipboard("https://discord.gg/wVF7ursHz")
+end)
+
+credits:AddLabel(" ")
+credits:AddLabel("==================================")
+
+local bigTitle = credits:AddLabel("🚀 PULSE HUB V2 🚀")
+
+pcall(function()
+    bigTitle.TextSize = 25
+    bigTitle.Font = Enum.Font.GothamBold
+end)
+
+task.spawn(function()
+    while true do
+        for i = 0, 1, 0.005 do
+            bigTitle.TextColor3 = Color3.fromHSV(i, 1, 1)
+            task.wait()
+        end
+    end
+end)
+
+credits:AddLabel("==================================")
+
+
+
